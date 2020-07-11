@@ -1,4 +1,3 @@
-string = "test"
+from SvgParseClass import svgParser
 
-if type(string) == str:
-    print(True)
+testParse = svgParser("TestFiles/houseTest.svg",True,True)

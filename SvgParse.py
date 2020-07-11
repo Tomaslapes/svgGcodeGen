@@ -93,37 +93,12 @@ for child in childLst:
         if "stroke-width" in atr:
             pixelsSTR = atr.split(":")[1]
             strokeWidths.append(float(pixelsSTR.strip("px")))
-    print(Colors)
-    print(strokeWidths)
+        print("Color and stroke-width were successfully EXTRACTED!")
+    #print(Colors)
+    #print(strokeWidths)
         
-        
-            
-
-'''
-xCoordsSTR = Coords.split("L")[0]
-xCoordsSTR = xCoordsSTR.strip("M")
-xCoords_ = xCoordsSTR.split(',')
-xCoords = []
-
-for x in xCoords_:
-    xCoords.append(float(x)/11.811024)
-
-yCoordsSTR = Coords.split("L")[1]
-yCoords_ = yCoordsSTR.split(',')
-yCoords = []
-
-for y in yCoords_:
-    yCoords.append(float(y)/11.811024)
-
-yCoords.reverse()
-
-
-print(xCoords)
-print(yCoords)
-
-'''
-
 #***********Debug Display***********
+
 print("***********Debug Display***********")
 for i in range(0,len(lineXCollection)):
     plt.plot(lineXCollection[i],lineYCollection[i],color=Colors[i],linewidth = strokeWidths[i])
