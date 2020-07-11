@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 
 USE_MILLIMETERS = True
 
-tree = ET.parse("Tomtest.svg")
+tree = ET.parse("TestFiles/Tomtest3.svg")
 root = tree.getroot()
 
 print(type(root))
