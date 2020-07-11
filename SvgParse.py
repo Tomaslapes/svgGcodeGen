@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 
 USE_MILLIMETERS = True
 
-tree = ET.parse("testLineComplex.svg")
+tree = ET.parse("Tomtest.svg")
 root = tree.getroot()
 
 print(type(root))
@@ -30,10 +30,15 @@ childLst = []
 for child in root:
     childLst.append(child.attrib)
 
+lineCollection = []# Stores all lines as [[[xPoint1,yPoint1],[xPoint2,yPoint2]],[[xPoint1,yPoint1],[xPoint2,yPoint2]]]
+lineXCollection = []# Stores all X values as a list X values per each line ie. list of x coord. list
+lineYCollection = []# Stores all Y values as a list Y values per each line ie. list of y coord. list
+
 for child in childLst:
-    Coords = root[0].attrib['d']
+    Coords = child["d"]
 
     LinesSTR = Coords.strip("M")
+    LinesSTR = LinesSTR.strip("Z")
     LinesSTR = LinesSTR.split("L")
     print(LinesSTR)
 
@@ -55,8 +60,10 @@ for child in childLst:
             LinesY.append(y)
         point = [x,y]
         Lines.append(point)
-
     print(Lines)
+    lineCollection.append(Lines)
+    lineXCollection.append(LinesX)
+    lineYCollection.append(LinesY)
         
             
 
@@ -85,7 +92,8 @@ print(yCoords)
 '''
 
 #***********Debug Display***********
-
-plt.plot(LinesX,LinesY)
+print("***********Debug Display***********")
+for i in range(0,len(lineXCollection)):
+    plt.plot(lineXCollection[i],lineYCollection[i])
 plt.show()
 
