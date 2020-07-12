@@ -83,10 +83,22 @@ class svgParser:
                     self.Colors.append(self.color)
                 if "stroke-width" in atr:
                     self.pixelsSTR = atr.split(":")[1]
-                    self.strokeWidths.append(float(self.pixelsSTR.strip("px")))
+                    self.strokeWidths.append(float(self.pixelsSTR.strip("px"))/2)
                 print("Color and stroke-width were successfully EXTRACTED!")
             #print(Colors)
             #print(strokeWidths)
+            #**********Correction transformation*****
+            print("**********Corrections")
+            self.min_ = min(self.lineYCollection)
+            self.min_ = min(self.min_)
+            print(self.min_*-1)
+            
+        for a,line in enumerate(self.lineYCollection):
+            print(line)
+            for b,point in enumerate(line):
+                self.lineYCollection[a][b] = self.lineYCollection[a][b] + self.min_*-1
+                print(self.lineYCollection[a][b])
+                            
 
     def preview(self):
         print("***********Debug Display***********")

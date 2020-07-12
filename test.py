@@ -1,3 +1,3 @@
 from SvgParseClass import svgParser
 
-testParse = svgParser("TestFiles/houseTest.svg",True,True)
+testParse = svgParser("TestFiles/FinalTest.svg",True,True)
