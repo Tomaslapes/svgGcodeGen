@@ -161,7 +161,7 @@ class Ui_MainWindow(object):
             warn.exec_()
             return
         gcode = gCodeGenerator(self.svgPath,self.bShowPreview,self.savePath,SAMPLE_HEIGHT=self.sampleHeight,STEP_HEIGHT=self.stepHeight)
-
+        self.cleanUp()
 
     def applySettings(self):
         if self.LineEditSample.text() != "" or self.LineEditStep.text() != "":

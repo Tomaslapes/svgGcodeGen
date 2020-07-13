@@ -51,7 +51,6 @@ class gCodeGenerator:
                         self.movingInstructions += f"G01 Z{self.currentDepth-self.SAMPLE_HEIGHT}\n"
                         continue
                     self.movingInstructions += "\n"
-                
             self.movingInstructions += "G01 Z5\n"
             self.currentDepth = self.SAMPLE_HEIGHT
 
