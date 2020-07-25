@@ -37,6 +37,9 @@ class gCodeGenerator:
         self.layerCount = int(round((self.SAMPLE_HEIGHT/self.STEP_HEIGHT)+0.5))
 
         for line in self.svg.lineCollection:
+            self.firstPoint_ = line[0]
+            self.lastPoint_ = line[-1]
+            print("FirstPoint = "+self.firstPoint_,"LastPoint = "+self.lastPoint_)
             for a in range(self.layerCount):
                 for i,point in enumerate(line):
                     self.x = str(point[0])
