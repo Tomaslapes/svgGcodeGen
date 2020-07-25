@@ -1,4 +1,5 @@
 from SvgParseClass import svgParser
+import math
 
 class gCodeGenerator:
     def __init__(self,svgPath,showPreview,savePath = "/",SAMPLE_HEIGHT = 30.0,STEP_HEIGHT=3.0):
@@ -18,8 +19,8 @@ class gCodeGenerator:
 
         with open("customGcode.gcode") as self.gcode:
             self.customGcode = self.gcode.read()
-            self.gcodelst_ = self.customGcode.split("#")
-            for part in self.gcodelst_:
+            gcodelst_ = self.customGcode.split("#")
+            for part in gcodelst_:
                 if ";Start gCode" in part:
                     self.startGcode = part
                 if ";End gCode" in part:
@@ -37,14 +38,18 @@ class gCodeGenerator:
         self.layerCount = int(round((self.SAMPLE_HEIGHT/self.STEP_HEIGHT)+0.5))
 
         for line in self.svg.lineCollection:
-            self.firstPoint_ = line[0]
-            self.lastPoint_ = line[-1]
-            print("FirstPoint = "+self.firstPoint_,"LastPoint = "+self.lastPoint_)
+            firstPoint_ = line[0]
+            lastPoint_ = line[-1]
+            linesTouch = False
+            print("FirstPoint = "+str(firstPoint_) +"\nLastPoint = "+str(lastPoint_))
+            if math.isclose(firstPoint_[0],lastPoint_[0],abs_tol=0.001) and math.isclose(firstPoint_[1],lastPoint_[1],abs_tol=0.001):
+                print("Points are close enough")
+                linesTouch = True
             for a in range(self.layerCount):
                 for i,point in enumerate(line):
-                    self.x = str(point[0])
-                    self.y = str(point[1])
-                    self.movingInstructions += f"G01 X{self.x} Y{self.y}"
+                    x = str(point[0])
+                    y = str(point[1])
+                    self.movingInstructions += f"G01 X{x} Y{y}"
                     if i == 0:
                         self.movingInstructions +=" F3000\n"
                         #move down
@@ -54,6 +59,8 @@ class gCodeGenerator:
                         self.movingInstructions += f"G01 Z{self.currentDepth-self.SAMPLE_HEIGHT}\n"
                         continue
                     self.movingInstructions += "\n"
+                if not linesTouch:
+                    self.movingInstructions += "G01 Z5\n"
             self.movingInstructions += "G01 Z5\n"
             self.currentDepth = self.SAMPLE_HEIGHT
 
@@ -61,6 +68,6 @@ class gCodeGenerator:
         self.finalGcode.write(self.endGcode)
 
         self.finalGcode.close()
-        print("**** G-CODE GENERATION SUCCESSFULL! ****")
+        print("**** G-CODE GENERATION SUCCESSFUL! ****")
 
 
