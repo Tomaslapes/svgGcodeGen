@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 from matplotlib import pyplot as plt
+import numpy as np
 
 class svgParser:
     def __init__(self, svgPath, showPreview, USE_MILLIMETERS = True):
@@ -102,8 +103,14 @@ class svgParser:
 
     def preview(self):
         print("***********Debug Display***********")
+        fig = plt.figure()
+        ax = plt.axes(projection='3d')
         for i in range(0,len(self.lineXCollection)):
+            #ax.plot3D(self.lineXCollection[i],self.lineYCollection[i],self.lineYCollection[i],"gray")
+
             plt.plot(self.lineXCollection[i],self.lineYCollection[i],color=self.Colors[i],linewidth = self.strokeWidths[i])
+        plt.axis('off')
+        plt.title("SVG preview-close to continue")
         plt.show()
 
     def getXlist(self):

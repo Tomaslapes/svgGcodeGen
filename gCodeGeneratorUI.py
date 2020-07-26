@@ -10,6 +10,7 @@ class Ui_MainWindow(object):
         self.sampleHeight = 30.0
         self.stepHeight = 3.0
         self.bShowPreview = False
+        self.bShowGcode = False
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
@@ -68,9 +69,12 @@ class Ui_MainWindow(object):
 
         self.checkBox = QtWidgets.QCheckBox(self.groupBox)
         self.checkBox.setGeometry(QtCore.QRect(10, 20, 161, 31))
+        self.checkBox2 = QtWidgets.QCheckBox(self.groupBox)
+        self.checkBox2.setGeometry(QtCore.QRect(10, 120, 200, 31))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.checkBox.setFont(font)
+        self.checkBox2.setFont(font)
         self.checkBox.setObjectName("checkBox")
         self.LineEditSample = QtWidgets.QLineEdit(self.groupBox)
         self.LineEditSample.setGeometry(QtCore.QRect(140, 50, 91, 31))
@@ -127,6 +131,8 @@ class Ui_MainWindow(object):
         self.Status.setText(_translate("MainWindow", "Please select file paths!"))
         self.checkBox.setText(_translate("MainWindow", "Show SVG preview"))
         self.checkBox.stateChanged.connect(self.showPreview)
+        self.checkBox2.setText(_translate("MainWindow", "Show G-CODE preview"))
+        self.checkBox2.stateChanged.connect(self.previewGCode)
         self.LineEditSample.setPlaceholderText(_translate("MainWindow", "30.0 mm"))
         self.LabelStep.setText(_translate("MainWindow", "Step HEIGHT:"))
         self.LineEditStep.setPlaceholderText(_translate("MainWindow", "3.0 mm"))
@@ -160,7 +166,7 @@ class Ui_MainWindow(object):
             warn.setIcon(QMessageBox.Critical)
             warn.exec_()
             return
-        gcode = gCodeGenerator(self.svgPath,self.bShowPreview,self.savePath,SAMPLE_HEIGHT=self.sampleHeight,STEP_HEIGHT=self.stepHeight)
+        gcode = gCodeGenerator(self.svgPath,self.bShowPreview,self.bShowGcode,self.savePath,SAMPLE_HEIGHT=self.sampleHeight,STEP_HEIGHT=self.stepHeight)
         self.cleanUp()
 
     def applySettings(self):
@@ -184,6 +190,10 @@ class Ui_MainWindow(object):
     def showPreview(self):
         self.bShowPreview = not self.bShowPreview
         print(self.bShowPreview)
+
+    def previewGCode(self):
+        self.bShowGcode = not self.bShowGcode
+        print(self.bShowGcode)
 
     def cleanUp(self):
         self.svgPath = ""
