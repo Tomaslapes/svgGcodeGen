@@ -1,11 +1,14 @@
 from SvgParseClass import svgParser
 import math
+from matplotlib import pyplot as plt
+import numpy as np
 
 class gCodeGenerator:
-    def __init__(self,svgPath,showPreview,savePath = "/",SAMPLE_HEIGHT = 30.0,STEP_HEIGHT=3.0):
+    def __init__(self,svgPath,showPreview,showGCode,savePath = "/",SAMPLE_HEIGHT = 30.0,STEP_HEIGHT=3.0):
         self.svgPath = svgPath
         self.savePath = savePath
         self.showPreview = showPreview
+        self.showGCode = showGCode
         self.SAMPLE_HEIGHT = SAMPLE_HEIGHT
         if STEP_HEIGHT <= 0.0:
             raise Exception("Step height should not be 0 or bellow 0!")
@@ -37,7 +40,9 @@ class gCodeGenerator:
 
         self.layerCount = int(round((self.SAMPLE_HEIGHT/self.STEP_HEIGHT)+0.5))
 
+        self.lineZCollection = []
         for line in self.svg.lineCollection:
+            Z_ = []
             firstPoint_ = line[0]
             lastPoint_ = line[-1]
             linesTouch = False
@@ -45,6 +50,7 @@ class gCodeGenerator:
             if math.isclose(firstPoint_[0],lastPoint_[0],abs_tol=0.001) and math.isclose(firstPoint_[1],lastPoint_[1],abs_tol=0.001):
                 print("Points are close enough")
                 linesTouch = True
+
             for a in range(self.layerCount):
                 for i,point in enumerate(line):
                     x = str(point[0])
@@ -61,13 +67,32 @@ class gCodeGenerator:
                     self.movingInstructions += "\n"
                 if not linesTouch:
                     self.movingInstructions += "G01 Z5\n"
+                Z_.append(self.currentDepth)
             self.movingInstructions += "G01 Z5\n"
+            self.lineZCollection.append(Z_)
             self.currentDepth = self.SAMPLE_HEIGHT
 
         self.finalGcode.write(self.movingInstructions)
         self.finalGcode.write(self.endGcode)
 
         self.finalGcode.close()
+        if self.showGCode:
+            self.previewGCode()
         print("**** G-CODE GENERATION SUCCESSFUL! ****")
+
+    def previewGCode(self):
+        fig = plt.figure()
+        ax = plt.axes(projection='3d')
+        for i in range(0, len(self.svg.lineXCollection)):
+            for a in range(self.layerCount):
+                test = np.array(self.svg.lineYCollection)
+                for element in test:
+                    z_ = np.where(True, a, element)
+                ax.plot3D(self.svg.lineXCollection[i], self.svg.lineYCollection[i], z_[i], "gray")
+        plt.axis('off')
+        plt.title("Quick GCode preview")
+
+        plt.show()
+
 
 
